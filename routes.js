@@ -1,6 +1,18 @@
 var debug = require('debug')('wx');
 var logger = require('./log/logger');
 
+exports.getUser = function () {
+  return function * (next) {
+    if (this.session.user) {
+      this.status = 200
+      this.body = {user: this.session.user}
+    } else {
+      this.status = 401
+      this.body = {error_msg: '未登陆，请登陆'}
+    }
+  }
+}
+
 exports.postLogin = function () {
   return function*(next) {
     var data = this.request.body
@@ -63,7 +75,7 @@ exports.getTodos = function () {
         this.throw(err)
       }
     } else {
-      this.status(401)
+      this.status = 401
       this.body = {error_msg: '您还未登陆，请登陆'}
     }
   }
@@ -73,7 +85,7 @@ exports.postSave = function () {
   debug('post save')
   return function* () {
     debug('session is %s', this.session.user)
-    // if (this.session.user) {
+    if (this.session.user) {
       try {
         var username = this.session.user
         var todo = {
@@ -91,10 +103,10 @@ exports.postSave = function () {
       } catch (err){
         this.throw(err)
       }
-    // } else {
-    //   this.status = 401
-    //   this.body = {error_msg: '请登陆用户'}
-    // }
+    } else {
+      this.status = 401
+      this.body = {error_msg: '请登陆用户'}
+    }
   }
 }
 
