@@ -56,7 +56,7 @@ app.on('error', function(err, ctx) {
 })
 
 // Start server
-app.listen(3344, function () {
-  console.log('Koa server listening on %d, in %s mode', 3344, env)
+app.listen(3345, function () {
+  console.log('Koa server listening on %d, in %s mode', 3345, env)
 })
 
